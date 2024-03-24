@@ -8,7 +8,10 @@ class Program
         video.PrintVideoDetails();
 
         // Menambahkan 100 pemutaran ke video
-        video.IncreasePlayCount(100);
+        for (int i = 1; i <= 216; i++)
+        {
+            video.IncreasePlayCount(10000000);
+        }
         video.PrintVideoDetails();
     }
 }
