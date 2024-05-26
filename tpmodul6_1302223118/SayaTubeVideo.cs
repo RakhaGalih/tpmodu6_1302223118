@@ -1,47 +1,59 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 
 public class SayaTubeVideo
 {
-    private int id;
-    private string title;
-    private int playCount;
+    private readonly int _id;
+    private readonly string _title;
+    private int _playCount;
 
     public SayaTubeVideo(string title)
     {
-        this.id = GenerateRandomId();
-        //precondition
-        Debug.Assert(title.Length <= 100 && title != null, "judul tidak ada atau panjang judul melebihi batas maksimal");
-        this.title = title;
-        this.playCount = 0;
+        // Validasi prasyarat untuk judul
+        if (title == null || title.Length > 100)
+        {
+            throw new ArgumentException("Judul harus tidak null dan maksimal 100 karakter.");
+        }
+
+        _id = GenerateRandomId();
+        _title = title;
+        _playCount = 0;
     }
 
     public void IncreasePlayCount(int count)
     {
-        //precondition
-        Debug.Assert(count <= 10000000, "jumlah penambahan melebihi batas maksimal");
-        try
+        // Validasi prasyarat untuk count
+        if (count > 10000000)
         {
-            //exception
-            int result = checked(this.playCount + count);
-            //postcondition
-            this.playCount = result;
-        } catch (Exception e)
-        {
-            Console.WriteLine($"Error: {e.Message}");
+            throw new ArgumentOutOfRangeException(nameof(count), "Jumlah harus 10.000.000 atau kurang.");
         }
 
+        try
+        {
+            // Menggunakan checked untuk menangani overflow
+            _playCount = checked(_playCount + count);
+        }
+        catch (OverflowException)
+        {
+            // Menangani kesalahan overflow
+            Console.WriteLine("Error: Play count overflowed.");
+        }
     }
 
     public void PrintVideoDetails()
     {
-        Console.WriteLine("==== video ====");
-        Console.WriteLine($"ID: {id}, \nTitle: {title}, \nPlay Count: {playCount} \n");
+        // Mencetak detail video
+        Console.WriteLine("==== Detail Video ====");
+        Console.WriteLine($"ID: {_id}");
+        Console.WriteLine($"Judul: {_title}");
+        Console.WriteLine($"Jumlah Pemutaran: {_playCount}\n");
     }
 
-    private int GenerateRandomId()
+    private static int GenerateRandomId()
     {
-        Random random = new Random();
-        return random.Next(10000, 99999); // Generate 5-digit random ID
+        // Menghasilkan ID acak 5 digit
+        var random = new Random();
+        return random.Next(10000, 99999);
     }
 }

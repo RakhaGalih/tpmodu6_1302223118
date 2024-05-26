@@ -4,14 +4,18 @@ class Program
 {
     static void Main(string[] args)
     {
-        SayaTubeVideo video = new SayaTubeVideo("Tutorial Design By Contract - [RAKHA_GALIH_NUGRAHA_SUKMA]");
+        var video = new SayaTubeVideo("Tutorial Design By Contract - [RAKHA_GALIH_NUGRAHA_SUKMA]");
         video.PrintVideoDetails();
 
-        // Menambahkan 100 pemutaran ke video
+        // Menguji metode IncreasePlayCount dengan nilai besar
+        video.IncreasePlayCount(1000000000);
+
+        // Menambahkan 10.000.000 pemutaran ke video sebanyak 216 kali
         for (int i = 1; i <= 216; i++)
         {
             video.IncreasePlayCount(10000000);
         }
+
         video.PrintVideoDetails();
     }
 }
